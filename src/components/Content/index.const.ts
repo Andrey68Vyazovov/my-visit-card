@@ -61,19 +61,19 @@ export const workCardsData: WorkCardData[] = [
     title: 'Ореол Жизни',
     description: 'A personal portfolio showcasing my web development projects with a focus on UX.',
     stack: ['React', 'TypeScript', 'SCSS', 'GSAP'],
-    images: ['/images/img10.png', '/images/portfolio-detail1.jpg', '/images/portfolio-detail2.jpg'],
+    images: ['./images/img10.png', './images/portfolio-detail1.jpg', './images/portfolio-detail2.jpg'],
   },
   {
     title: 'ProCharity',
     description: 'A scalable e-commerce solution with real-time inventory and payment integration.',
     stack: ['Next.js', 'Node.js', 'MongoDB', 'Stripe'],
-    images: ['/images/111.png', '/images/ecommerce-detail1.jpg'],
+    images: ['./images/111.png', './images/ecommerce-detail1.jpg'],
   },
   {
     title: 'TechGadget',
     description: 'Interactive dashboard for visualizing business analytics and trends.',
     stack: ['React', 'D3.js', 'TypeScript', 'Express'],
-    images: ['/images/welcome.png'],
+    images: ['./images/welcome.png'],
   },
 ];
 
