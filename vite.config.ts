@@ -4,9 +4,18 @@ import { libInjectCss } from 'vite-plugin-lib-inject-css';
 
 export default defineConfig({
   plugins: [react(), libInjectCss()],
+  base: './', 
   css: {
     modules: {
       localsConvention: 'camelCase',
     },
   },
+  build: {
+    outDir: 'dist',
+    rollupOptions: {
+      input: {
+        main: './index.html'
+      }
+    }
+  }
 });
