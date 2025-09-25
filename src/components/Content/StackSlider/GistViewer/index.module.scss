@@ -1,0 +1,44 @@
+.viewerContainer {
+  position: absolute;
+  bottom: -250px; /* Частично ниже слайдера */
+  left: 0;
+  width: 100%;
+  max-height: 410px; /* Частично видимый */
+  overflow-y: auto;
+  background: transparent; /* Затемнённый фон */
+  padding: 16px;
+  border-radius: 0 0 8px 8px;
+  filter: brightness(0%); /* Начало анимации */
+  opacity: 0; 
+  transition: filter 2s ease-in-out, opacity 2s ease-in-out;/* Анимация яркости 2s в обе стороны */
+  z-index: -1; /* Под слайдером */
+  scrollbar-width: none; 
+}
+
+.viewerContainer::-webkit-scrollbar {
+  display: none; /* Скрыть скроллбар в Chrome/Safari */
+}
+
+
+.visible {
+  filter: brightness(100%); /* Полная яркость после fade-in */
+  opacity: 1;
+}
+
+.hidden {
+  filter: brightness(0%);
+  opacity: 0; /* Скрыть после fade-out */
+}
+
+.error {
+  color: #fff;
+  font-size: 14px;
+  text-align: center;
+}
+
+.codeBlock {
+  opacity: 0.5; /* Лёгкое затемнение для "фонового" эффекта */
+  pre {
+    background: transparent !important;
+  }
+}
