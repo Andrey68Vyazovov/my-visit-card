@@ -1,0 +1,34 @@
+.indicatorContainer {
+  width: 130px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  cursor: pointer;
+}
+
+.triangleContainer {
+  display: flex;
+  gap: 10px;
+}
+
+.triangle {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 10px 0 10px 17.3px; /* Треугольник с равными сторонами */
+  border-color: transparent transparent transparent #f28c38;
+  filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.3)); /* Легкое затемнение по краям */
+}
+
+.pauseIcon {
+  display: flex;
+  gap: 8px;
+}
+
+.pauseBar {
+  width: 7px;
+  height: 20px;
+  background: linear-gradient(90deg, #f28c38, #d9742e); /* Оранжевый с затемнением */
+  border-radius: 2px;
+}

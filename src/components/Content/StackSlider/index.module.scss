@@ -1,0 +1,34 @@
+.sliderWrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-top: 50px;
+}
+
+.sliderContainer {
+  width: 1080px;
+  height: 300px;
+  overflow: hidden;
+  position: relative;
+  border: 2px solid #a3a3a3;
+}
+
+.sliderTrack {
+  display: flex;
+  gap: 0;
+  width: max-content;
+  height: 100%;
+  will-change: transform;
+
+}
+
+.slide {
+  flex: 0 0 auto;
+  width: 360px;
+  height: 300px;
+}
+
+.indicatorWrapper {
+  margin-right: 0;
+}

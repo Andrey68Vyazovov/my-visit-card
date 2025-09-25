@@ -1,0 +1,113 @@
+// src/components/BackgroundAnimation/Star/index.module.scss
+.star {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform-origin: center;
+  animation: orbit var(--orbit-speed) linear infinite;
+  animation-delay: calc(var(--start-angle) / 360 * var(--orbit-speed) * -1);
+  will-change: transform;
+}
+
+.starPixel {
+  width: var(--star-size);
+  height: var(--star-size);
+  background-color: var(--star-color);
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 3px var(--star-color);
+  z-index: 2;
+  transition: all 0.2s ease-in-out;
+}
+
+.twinkling .starPixel {
+  animation: twinkle var(--twinkle-duration) ease-in-out infinite;
+  animation-delay: var(--twinkle-delay);
+  transform-origin: center;
+}
+
+.starTrail {
+  position: absolute;
+  width: var(--trail-length);
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    #4a4a4a 30%,
+    #666 70%,
+    transparent 100%
+  );
+  top: 50%;
+  left: calc(50% - var(--trail-length));
+  transform: translateY(-50%);
+  opacity: 0.6;
+}
+
+.starBeam {
+  position: absolute;
+  width: var(--beam-length);
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    #666 0%,
+    transparent 100%
+  );
+  top: 50%;
+  left: 50%;
+  transform: 
+    translate(calc(var(--star-size) / 2), var(--beam-vertical-offset))
+    rotate(var(--beam-angle));
+  transform-origin: left center;
+  opacity: 0.7;
+  z-index: 1;
+}
+
+// Упрощенная версия если cos/sin не работают
+@keyframes orbit {
+  0% {
+    transform: 
+      translate(-50%, -50%) 
+      translateX(calc(cos(var(--start-angle)) * var(--orbit-radius-x))) 
+      translateY(calc(sin(var(--start-angle)) * var(--orbit-radius-y)));
+  }
+  25% {
+    transform: 
+      translate(-50%, -50%) 
+      translateX(calc(cos(calc(90deg + var(--start-angle))) * var(--orbit-radius-x))) 
+      translateY(calc(sin(calc(90deg + var(--start-angle))) * var(--orbit-radius-y)));
+  }
+  50% {
+    transform: 
+      translate(-50%, -50%) 
+      translateX(calc(cos(calc(180deg + var(--start-angle))) * var(--orbit-radius-x))) 
+      translateY(calc(sin(calc(180deg + var(--start-angle))) * var(--orbit-radius-y)));
+  }
+  75% {
+    transform: 
+      translate(-50%, -50%) 
+      translateX(calc(cos(calc(270deg + var(--start-angle))) * var(--orbit-radius-x))) 
+      translateY(calc(sin(calc(270deg + var(--start-angle))) * var(--orbit-radius-y)));
+  }
+  100% {
+    transform: 
+      translate(-50%, -50%) 
+      translateX(calc(cos(calc(360deg + var(--start-angle))) * var(--orbit-radius-x))) 
+      translateY(calc(sin(calc(360deg + var(--start-angle))) * var(--orbit-radius-y)));
+  }
+}
+
+@keyframes twinkle {
+  0%, 100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+    box-shadow: 0 0 2px var(--star-color);
+  }
+  50% {
+    opacity: 0.3;
+    transform: translate(-50%, -50%) scale(2);
+    box-shadow: 0 0 5px var(--star-color), 0 0 10px var(--star-color);
+  }
+}
