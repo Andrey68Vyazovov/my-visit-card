@@ -1,4 +1,4 @@
-// src/components/Content/index.tsx
+import Footer from '../Footer';
 import styles from './index.module.scss';
 import TestContent from './TestContent';
 
@@ -14,12 +14,8 @@ const Content = () => {
       <main className={styles.main}>
         {/* Основной контент с тестовым блоком */}
         <TestContent />
-      </main>
-      
-      <footer className={styles.footer}>
-        {/* Футер высотой 230px */}
-        <p>Footer</p>
-      </footer>
+      </main>   
+      <Footer />
     </div>
   );
 };

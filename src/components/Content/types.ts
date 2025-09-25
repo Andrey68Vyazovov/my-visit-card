@@ -5,3 +5,15 @@ export interface TechStackItem {
   gist?: string;
   content?: string;
 }
+
+export interface WorkCardData {
+  title: string;
+  description: string;
+  stack: string[];
+  images: string[];
+}
+
+export interface ContactItem {
+  type: 'phone' | 'email' | 'telegram' | 'github';
+  action: string;
+}

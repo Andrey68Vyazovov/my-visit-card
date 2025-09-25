@@ -1,4 +1,4 @@
-import { TechStackItem } from "./types";
+import { ContactItem, TechStackItem, WorkCardData } from "./types";
 
 export const stackArray: TechStackItem[] = [
   {
@@ -45,4 +45,41 @@ export const stackArray: TechStackItem[] = [
     gist: "https://gist.github.com/AlbetItrum/e65ec1f257f821326e8ac6db4dc504a9",
     content: "type TRouting = {\n  routes: TRouteProps[];\n};\n\nconst Routing = ({ routes }: TRouting) => {\n  const { roles } = appStore;\n\n  const allowedRouteList = useGetAllowedRoutes(routes, roles);\n\n  return (\n    <Suspense fallback={<Loader text=\"Loading\" />}>\n      <Switch>\n        <Redirect exact from={urls.ROOT} to={urls.HOME} />\n\n        {allowedRouteList.map(({ path, exact, component, isPrivate }) => {\n          if (isPrivate) {\n            return <PrivateRoute key={`${path}`} component={component} exact={exact} path={path} />;\n          }\n\n          return <Route key={`${path}`} component={component} exact={exact} path={path} />;\n        })}\n      </Switch>\n    </Suspense>\n  );\n};\n\nexport default observer(Routing);",
   }
+];
+
+export const myWorkData = {
+  title: 'My Work',
+  frames: [
+    'Deployed scalable, responsive web and hybrid mobile apps that served hundreds of thousands of clients.',
+    'Focused on high-performing applications with intuitive and dynamic interactions. I also have a passion for data analytics and visualization.',
+  ],
+  videoUrl: 'https://www.pexels.com/download/video/2278095/',
+};
+
+export const workCardsData: WorkCardData[] = [
+  {
+    title: 'Ореол Жизни',
+    description: 'A personal portfolio showcasing my web development projects with a focus on UX.',
+    stack: ['React', 'TypeScript', 'SCSS', 'GSAP'],
+    images: ['/images/img10.png', '/images/portfolio-detail1.jpg', '/images/portfolio-detail2.jpg'],
+  },
+  {
+    title: 'ProCharity',
+    description: 'A scalable e-commerce solution with real-time inventory and payment integration.',
+    stack: ['Next.js', 'Node.js', 'MongoDB', 'Stripe'],
+    images: ['/images/111.png', '/images/ecommerce-detail1.jpg'],
+  },
+  {
+    title: 'TechGadget',
+    description: 'Interactive dashboard for visualizing business analytics and trends.',
+    stack: ['React', 'D3.js', 'TypeScript', 'Express'],
+    images: ['/images/welcome.png'],
+  },
+];
+
+export const contactsData: ContactItem[] = [
+  { type: 'phone', action: '+1234567890' },
+  { type: 'email', action: 'email@example.com' },
+  { type: 'telegram', action: 'https://t.me/username' },
+  { type: 'github', action: 'https://github.com/username' },
 ];
