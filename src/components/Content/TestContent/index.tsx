@@ -8,7 +8,7 @@ import styles from "./index.module.scss";
 import Contacts from "../Contacts";
 
 const TestContent = () => {
-  const { ref, isVisible } = useScrollAnimation();
+  const { setRef, visibleStates  } = useScrollAnimation(2);
   return (
     <div className={styles.testContent}>
       <div className={styles.name}>
@@ -19,16 +19,16 @@ const TestContent = () => {
         </div>
       </div>
       <div 
-        ref={ref}
-        className={`${styles.subtitle} ${isVisible ? styles.visible : ''}`}
+        ref={setRef(0)}
+        className={`${styles.subtitle} ${visibleStates[0]  ? styles.visible : ''}`}
       >
         My Expertise
       </div>
       <TechStackSlider data={stackArray}/>
       <MyWork />
       <div 
-        ref={ref}
-        className={`${styles.subtitle} ${isVisible ? styles.visible : ''}`}
+        ref={setRef(1)}
+        className={`${styles.subtitle} ${visibleStates[1]  ? styles.visible : ''}`}
       >
         Contacts
       </div>

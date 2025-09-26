@@ -15,7 +15,7 @@ const TechStackSlider = ({
   data,
   scrollSpeed: initialScrollSpeed = 4000,
 }: TechStackProps) => {
-  const { ref, isVisible } = useScrollAnimation();
+  const { setRef, visibleStates  } = useScrollAnimation(1);
   const [currentIndex, setCurrentIndex] = useState(0); // Начинаем с первого оригинального слайда
   const [isTransitioning, setIsTransitioning] = useState(true);
   const [isFirstSlide, setIsFirstSlide] = useState(true); // Для начальной задержки
@@ -31,12 +31,12 @@ const TechStackSlider = ({
     data.length > 0
       ? [
           // ...data.slice(-3),
-          ...data, // Оригинальные слайды
-          ...data.slice(0, 3), // Копии первых трех слайдов
+          ...data,
+          ...data.slice(0, 3),
         ]
       : [];
 
-  const slideWidth = 360; // Ширина одного слайда (из SCSS)
+  const slideWidth = 360;
   const totalSlides = extendedSlides.length;
 
   // Переключение скорости
@@ -115,7 +115,8 @@ const TechStackSlider = ({
   };
 
   useEffect(() => {
-    if (!isVisible || totalSlides <= 3) {
+   if (!visibleStates[0] || totalSlides <= 3) {
+  //  if (totalSlides <= 3) {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
       }
@@ -141,22 +142,13 @@ const TechStackSlider = ({
         clearTimeout(resumeTimeoutRef.current);
       }
     };
-  }, [
-    isVisible,
-    totalSlides,
-    isFirstSlide,
-    currentIndex,
-    scrollSpeed,
-    isPaused,
-    startInterval,
-  ]);
+  }, [totalSlides, isFirstSlide, currentIndex, scrollSpeed, isPaused, startInterval, visibleStates]);
 
-  // Включаем анимацию после сброса
   useEffect(() => {
     if (!isTransitioning) {
       const timeout = setTimeout(() => {
         setIsTransitioning(true);
-      }, 50); // Небольшая задержка для рендера
+      }, 50);
       return () => clearTimeout(timeout);
     }
   }, [isTransitioning]);
@@ -164,7 +156,7 @@ const TechStackSlider = ({
   return (
     <div className={styles.sliderWrapper}>
       <div
-        ref={ref}
+        ref={setRef(0)}
         className={styles.sliderContainer}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}

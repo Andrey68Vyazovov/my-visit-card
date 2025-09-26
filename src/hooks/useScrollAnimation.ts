@@ -1,31 +1,42 @@
-// src/hooks/useScrollAnimation.ts
 import { useState, useEffect, useRef } from 'react';
 
-export const useScrollAnimation = () => {
-  const [isVisible, setIsVisible] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
+export const useScrollAnimation = (count: number) => {
+  const [visibleStates, setVisibleStates] = useState<boolean[]>(
+    Array(count).fill(false)
+  );
+  const refs = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry && entry.isIntersecting) {
-          setIsVisible(true);
-        }
-      },
-      { threshold: 0.3 }
-    );
+    const observers: IntersectionObserver[] = [];
 
-    const currentRef = ref.current;
-    if (currentRef) {
-      observer.observe(currentRef);
-    }
+    refs.current.forEach((element, index) => {
+      if (element) {
+        const observer = new IntersectionObserver(
+          ([entry]) => {
+            if (entry && entry.isIntersecting) {
+              setVisibleStates(prev => {
+                const newStates = [...prev];
+                newStates[index] = true;
+                return newStates;
+              });
+            }
+          },
+          { threshold: 0.3 }
+        );
+
+        observer.observe(element);
+        observers.push(observer);
+      }
+    });
 
     return () => {
-      if (currentRef) {
-        observer.unobserve(currentRef);
-      }
+      observers.forEach(observer => observer.disconnect());
     };
-  }, []);
+  }, [count]);
 
-  return { ref, isVisible };
+  const setRef = (index: number) => (element: HTMLDivElement | null) => {
+    refs.current[index] = element;
+  };
+
+  return { setRef, visibleStates };
 };
