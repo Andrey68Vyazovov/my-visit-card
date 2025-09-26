@@ -1,0 +1,259 @@
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.modalContent {
+  font-family: 'Poppins', sans-serif;
+  background: #1b242f;
+  border-radius: 12px;
+  max-width: 700px;
+  width: 100%;
+  max-height: 80vh;
+  height: 100%;
+  overflow-y: auto;
+  position: relative;
+  animation: slideUp 0.3s ease-out;
+  
+  &:focus {
+    outline: none;
+  }
+}
+
+.closeButton {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.5);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  z-index: 1000;
+  color: white;
+  border-radius: 0 12px 0 0;
+  
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+  
+  &:hover {
+    background: rgba(0, 0, 0, 0.7);
+  }
+  
+  &:active {
+    background: rgba(0, 0, 0, 0.8);
+  }
+}
+
+.modalHeader {
+  flex: 0.3;
+  padding: 32px 32px 16px;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.modalTitle {
+  margin: 0;
+  color: white;
+  font-size: 24px;
+  letter-spacing: 1px;
+  font-weight: 600;
+}
+
+.modalStack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.techTag {
+  background: #f0f0f0;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 14px;
+}
+
+.modalBody {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  padding: 12px 32px 16px;
+}
+
+.modalDescription {
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.imagesGrid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.modalImage {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+// Анимации
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Анимация закрытия
+.modalOverlay.closing {
+  animation: fadeOut 0.2s ease-in forwards;
+}
+
+.modalContent.closing {
+  animation: slideDown 0.2s ease-in forwards;
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+}
+
+.modalLayout {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.sliderSection {
+  flex: 0 0 65%; // 60% высоты
+  min-height: 0; // важно для flexbox
+  background: #f8f9fa;
+  border-radius: 8px 8px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sliderPlaceholder {
+  text-align: center;
+  padding: 20px;
+  
+  h4 {
+    margin: 0 0 8px 0;
+    color: #333;
+  }
+  
+  p {
+    margin: 0 0 16px 0;
+    color: #666;
+  }
+}
+
+.imagePreview {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.imageItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 100px;
+  
+  img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-bottom: 4px;
+  }
+  
+  span {
+    font-size: 10px;
+    text-align: center;
+    color: #666;
+  }
+}
+
+.contentSection {
+  flex: 0 0 35%; // 40% высоты
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.projectInfo {
+  h4 {
+    margin: 0 0 12px 0;
+    color: #333;
+  }
+  
+  p {
+    margin: 0;
+    line-height: 1.5;
+    letter-spacing: 1px;
+    color: white;
+  }
+}
+
+// Адаптивность для мобильных устройств
+@media (max-height: 600px) {
+  .sliderSection {
+    flex: 0 0 50%;
+  }
+  
+  .contentSection {
+    flex: 0 0 50%;
+  }
+}

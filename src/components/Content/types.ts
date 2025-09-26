@@ -6,11 +6,16 @@ export interface TechStackItem {
   content?: string;
 }
 
+export interface WorkImage {
+  src: string;
+  description: string;
+}
+
 export interface WorkCardData {
   title: string;
   description: string;
   stack: string[];
-  images: string[];
+  images: WorkImage[];
 }
 
 export interface ContactItem {

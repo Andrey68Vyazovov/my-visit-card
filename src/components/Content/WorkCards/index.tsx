@@ -3,16 +3,20 @@ import { WorkCardData } from '../types';
 
 interface WorkCardsProps {
   cards: WorkCardData[];
+  onViewProject?: (index: number) => void;
 }
 
-const WorkCards = ({ cards }: WorkCardsProps) => {
+const WorkCards = ({ cards, onViewProject }: WorkCardsProps) => {
+  const handleViewProject = (index: number) => () => {
+    onViewProject?.(index);
+  };
   return (
     <div className={styles.cardsContainer}>
       {cards.map((card, index) => (
-        <div key={index} className={styles.card}>
+        <div key={index} className={styles.card} onClick={handleViewProject(index)}>
           <div className={styles.imageWrapper}>
             <img
-              src={card.images[0]}
+              src={card.images[0]?.src}
               alt={`${card.title} poster`}
               className={styles.image}
             />
@@ -27,7 +31,6 @@ const WorkCards = ({ cards }: WorkCardsProps) => {
                 </span>
               ))}
             </div>
-            <button className={styles.viewButton}>view project</button>
           </div>
         </div>
       ))}

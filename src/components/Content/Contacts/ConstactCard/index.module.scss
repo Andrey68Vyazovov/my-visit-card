@@ -5,20 +5,20 @@
   margin-top: 50px;
   margin-bottom: 150px;
   cursor: pointer;
-  transition: transform 0.3s ease-in-out;
+  transition: transform 0.8s ease-in-out;
 
   &:hover {
-    transform: translateY(-3px);
+    transform: translateY(-10px);
 
   }
 }
 
 .icon {
   margin-bottom: 10px;
-  color: #97a7bd7d; // Цвет иконки, можно изменить
-
+  color: #97a7bd7d;
+    
   &:hover {
-    color: #deebfd; 
+    color: rgba(65, 105, 225, 0.5); 
   }
 
 }

@@ -60,21 +60,73 @@ export const workCardsData: WorkCardData[] = [
   {
     title: 'Ореол Жизни',
     description: 'A personal portfolio showcasing my web development projects with a focus on UX.',
-    stack: ['React', 'TypeScript', 'SCSS', 'GSAP'],
-    images: ['./images/img10.png', './images/portfolio-detail1.jpg', './images/portfolio-detail2.jpg'],
-  },
+    stack: ['React', 'TypeScript', 'Next.js', 'Redux', 'React Hook Form', 'FSD', 'GitHub Actions', 'React Testing Library','SCSS'],
+    images: [
+      {
+        src: './images/halolife5.png',
+        description: 'Автономная некоммерческая организация по оказанию всесторонней помощи пациентам с онкологическим диагнозом и их близким - Ореол Жизни'
+      },
+      {
+        src: './images/halolife3.png', 
+        description: 'Виджет отображения постов. Telegram Интеграция с Telegram API для встраивания контента. Компонент показа телеграм-ленты в реальном времени'
+      },
+      {
+        src: './images/img10',
+        description: 'Адаптивная версия для мобильных устройств'
+      }
+    ],  },
   {
     title: 'ProCharity',
-    description: 'A scalable e-commerce solution with real-time inventory and payment integration.',
-    stack: ['Next.js', 'Node.js', 'MongoDB', 'Stripe'],
-    images: ['./images/111.png', './images/ecommerce-detail1.jpg'],
-  },
+    description: '— поиск интеллектуальных волонтеров для благотворительных организаций.',
+    stack: ['React', 'TypeScript', 'Redux', 'SCSS','Storybook','Docker','MongoDB', 'GitHub Actions'],
+    images: [
+      {
+        src: './images/pro5.png',
+        description: 'ProCharity — это возможность для профессионалов своего дела помочь некоммерческим организациям в вопросах, которые требуют специальных знаний и опыта.'
+      },
+      {
+        src: './images/pro2.png',
+        description: 'Гибкая система управления доступом. Разделение функционала по типам пользователей. Безопасная авторизация с персональным интерфейсом.'
+      },
+      {
+        src: './images/pro3.png',
+        description: 'Динамическая форма с полями разных типов. Интеграция загрузки фото и документов. Система валидации и предобработки файлов.'
+      },
+      {
+        src: './images/pro4.png',
+        description: 'Система компонентов для визуального контента. Адаптивные баннеры с градиентными overlay. Карточки с hover-эффектами и микроанимациями.'
+      },
+      {
+        src: './images/pro6.png',
+        description: 'Интерактивные компоненты с микровзаимодействиями. Сложные состояния: loading, disabled, success. Плавные переходы между состояниями интерфейса.'
+      }
+    ],  },
   {
     title: 'TechGadget',
-    description: 'Interactive dashboard for visualizing business analytics and trends.',
-    stack: ['React', 'D3.js', 'TypeScript', 'Express'],
-    images: ['./images/welcome.png'],
-  },
+    description: 'Интернет-магазин электроники.',
+    stack: ['React', 'TypeScript', 'MUI', 'Styled Components', 'ESLint', 'Prettier'],
+    images: [
+      {
+        src: './images/tg1.png',
+        description: 'Продуктовые карточки с детальной информацией и галереей. Интеграция системы корзины и быстрого заказа. Визуальная витрина с grid/layout представлением.'
+      },
+      {
+        src: './images/tg2.png',
+        description: 'Интерактивная корзина товаров с полным управлением. Быстрый переход к товарам и оформлению заказа. Динамическое обновление суммы и количества позиций.'
+      },
+      {
+        src: './images/tg3.png',
+        description: 'Комплексная карточка товара с полным набором взаимодействий. Интерактивный слайдер фотографий и детальная информация. Система рейтингов, отзывов и управления предпочтениями.'
+      },
+      {
+        src: './images/tg4.png',
+        description: 'Чистые формы входа и регистрации без лишних элементов. Быстрое восстановление доступа в несколько кликов. Упрощенный процесс верификации пользователей.'
+      },
+      {
+        src: './images/tg5.png',
+        description: 'Система управления персональными предпочтениями. Добавление товаров в избранное и создание коллекций. Публикация и модерация пользовательских отзывов.'
+      }
+    ],  },
 ];
 
 export const contactsData: ContactItem[] = [

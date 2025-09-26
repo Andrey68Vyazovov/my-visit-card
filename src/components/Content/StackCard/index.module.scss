@@ -8,10 +8,26 @@
   flex-direction: column;
   padding: 20px;
   box-sizing: border-box;
+  position: relative;
 
-  &:hover {
-    background: rgba(255, 255, 255, 0.1);
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(32, 160, 153, 0.1) 0%,    // малахитовый
+      rgba(65, 105, 225, 0.2) 100%   // лазурный
+    );
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: -1;
   }
+
+  &:hover::before {
+    opacity: 1;
+  }
+
 }
 
 .header {
