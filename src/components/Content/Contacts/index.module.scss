@@ -36,13 +36,18 @@
   padding-bottom: 40px;
 
   @media (max-width: 1079px) {
-     max-width: 60%;
+    max-width: 60%;
     gap: 30px;
   }
 
   @media (max-width: 1024px) {
     flex-direction: column;
     gap: 20px;
+  }
+
+  @media (max-width: 479px) {
+    max-width: 90%;
+    gap: 15px;
   }
 }
 
@@ -134,5 +139,12 @@
     align-items: center;
     gap: 20px;
     padding: 60px 0 40px;
+  }
+
+  @media (max-width: 479px) {
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    padding: 30px 0 20px;
   }
 }

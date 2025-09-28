@@ -4,13 +4,13 @@
 
 .terminal {
   font-family: 'Courier New', monospace;
-  font-size: var(--terminal-font-size);
   color: white;
   font-weight: bold;
   text-shadow: 0 0 10px rgba(115, 62, 248, 0.8);
 }
 
 .text {
+  font-size: var(--terminal-font-size);
   letter-spacing: 1px;
 }
 
@@ -27,5 +27,11 @@
 @media (max-width: 1439px) {
   :root {
     --terminal-font-size: 20px;
+  }
+}
+
+@media (max-width: 479px) {
+  :root {
+    --terminal-font-size: 16px;
   }
 }

@@ -1,5 +1,7 @@
-import { TechStackItem } from '../types';
 import styles from './index.module.scss';
+
+import { TechStackItem } from '../types';
+
 
 const TechStackCard = ({
   logo,

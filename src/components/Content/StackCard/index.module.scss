@@ -89,6 +89,10 @@
   margin: 0;
   flex-grow: 1;
   white-space: pre-line;
+
+  @media (max-width: 479px) {
+    font-size: 14px;
+  }
 }
 
 .buttonContainer {
@@ -110,7 +114,7 @@
 .gistButton {
   background: transparent;
   border: none;
-  color: #ff8c00; // оранжевый цвет
+  color: #ff8c00;
   font-family: 'Courier New', monospace;
   font-size: 20px;
   letter-spacing: 1px;
@@ -121,7 +125,6 @@
   transition: all 0.3s ease;
   position: relative;
   
-  // Объемный эффект для текста
   text-shadow: 
     0 0 1px rgba(255, 140, 0, 0.8),
     0 1px 2px rgba(255, 140, 0, 0.6),
@@ -129,7 +132,7 @@
     0 4px 8px rgba(255, 140, 0, 0.2);
   
   &:hover {
-    color: #ffa500; // более яркий оранжевый при наведении
+    color: #ffa500;
     transform: translateY(-1px);
     text-shadow: 
       0 0 2px rgba(255, 165, 0, 0.9),
