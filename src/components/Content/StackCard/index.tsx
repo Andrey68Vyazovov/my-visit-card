@@ -7,7 +7,11 @@ const TechStackCard = ({
   description,
   gist
 }: TechStackItem) => {
-  void gist; // Currently unused, but reserved for future use
+  const handleViewGist = () => {
+    if(gist){
+      window.open(gist, '_blank', 'noopener,noreferrer')
+    }
+  }
   
   return (
     <div className={styles.card}>
@@ -24,6 +28,15 @@ const TechStackCard = ({
         </div>
         
         <p className={styles.description}>{description}</p>
+      </div>
+      <div className={styles.buttonContainer}>
+        <button 
+          className={styles.gistButton} 
+          onClick={handleViewGist}
+          disabled={!gist}
+        >
+          view gist...
+        </button>
       </div>
     </div>
   );

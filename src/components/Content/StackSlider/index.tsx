@@ -8,29 +8,29 @@ import GistViewer from "./GistViewer";
 
 interface TechStackProps {
   data: TechStackItem[];
-  scrollSpeed?: number; // Необязательный пропс для начальной скорости прокрутки (в мс)
+  scrollSpeed?: number;
 }
 
 const TechStackSlider = ({
   data,
   scrollSpeed: initialScrollSpeed = 4000,
 }: TechStackProps) => {
-  const { setRef, visibleStates  } = useScrollAnimation(1);
-  const [currentIndex, setCurrentIndex] = useState(0); // Начинаем с первого оригинального слайда
+  const { setRef, visibleStates } = useScrollAnimation(1);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(true);
-  const [isFirstSlide, setIsFirstSlide] = useState(true); // Для начальной задержки
-  const [scrollSpeed, setScrollSpeed] = useState(initialScrollSpeed); // Текущая скорость
-  const [isPaused, setIsPaused] = useState(false); // Состояние паузы
+  const [isFirstSlide, setIsFirstSlide] = useState(true);
+  const [scrollSpeed, setScrollSpeed] = useState(initialScrollSpeed);
+  const [isPaused, setIsPaused] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [lastLoadedTime, setLastLoadedTime] = useState<number>(0);
   const intervalRef = useRef<number | null>(null);
   const resumeTimeoutRef = useRef<number | null>(null);
-  const hoverTimeoutRef = useRef<number | null>(null); 
+  const hoverTimeoutRef = useRef<number | null>(null);
+  const [isSwitching, setIsSwitching] = useState(false);
 
   const extendedSlides =
     data.length > 0
       ? [
-          // ...data.slice(-3),
           ...data,
           ...data.slice(0, 3),
         ]
@@ -39,7 +39,6 @@ const TechStackSlider = ({
   const slideWidth = 360;
   const totalSlides = extendedSlides.length;
 
-  // Переключение скорости
   const handleSpeedChange = () => {
     const speeds = [4000, 2000, 1000];
     const currentIndex = speeds.indexOf(scrollSpeed);
@@ -47,7 +46,6 @@ const TechStackSlider = ({
     setScrollSpeed(speeds[nextIndex] ?? scrollSpeed);
   };
 
-  // Функция для запуска интервала прокрутки
   const startInterval = useCallback(() => {
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
@@ -57,23 +55,19 @@ const TechStackSlider = ({
         setCurrentIndex((prev) => {
           const nextIndex = prev + 1;
 
-          // Если дошли до первого дублированного слайда
           if (nextIndex >= totalSlides - 3) {
-            // Мгновенно сбрасываем на первый оригинальный слайд
             setTimeout(() => {
               setIsTransitioning(false);
-              setCurrentIndex(0); // Сбрасываем на первый оригинальный
-              setIsFirstSlide(true); // Следующий интервал будет scrollSpeed/2
-            }, 1000); // Ждем завершения анимации (1s)
+              setCurrentIndex(0);
+              setIsFirstSlide(true);
+            }, 1000);
             return nextIndex;
           }
 
-          // Отключаем флаг isFirstSlide после первого слайда
           if (isFirstSlide) {
             setIsFirstSlide(false);
           }
 
-          // Включаем анимацию для следующего перехода
           setIsTransitioning(true);
           return nextIndex;
         });
@@ -84,46 +78,64 @@ const TechStackSlider = ({
     );
   }, [isFirstSlide, currentIndex, scrollSpeed, totalSlides]);
 
-  // Обработчик наведения мыши на слайдер
   const handleMouseEnter = () => {
     setIsPaused(true);
     if (intervalRef.current) {
-      clearInterval(intervalRef.current); // Останавливаем прокрутку
+      clearInterval(intervalRef.current);
       intervalRef.current = null;
     }
     if (resumeTimeoutRef.current) {
-      clearTimeout(resumeTimeoutRef.current); // Очищаем таймер возобновления
+      clearTimeout(resumeTimeoutRef.current);
       resumeTimeoutRef.current = null;
     }
   };
 
-  // Обработчик ухода мыши со слайдера
   const handleMouseLeave = () => {
     setIsPaused(false);
+    setHoveredIndex(null);
+    
     resumeTimeoutRef.current = setTimeout(() => {
-      startInterval(); // Возобновляем прокрутку через 3 секунды
-    }, 3000); // Задержка 3 секунды после ухода мыши
+      startInterval();
+    }, 3000);
   };
 
+  const handleCardHover = (index: number) => {
+    const now = Date.now();
+    
+    if (isSwitching || now - lastLoadedTime < 2000) {
+      return;
+    }
+    
+    setIsSwitching(true);
+    setLastLoadedTime(now);
+    
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+    }
+    
+    setHoveredIndex(null);
+    
+    setTimeout(() => {
+      setHoveredIndex(index);
+      setIsSwitching(false);
+    }, 2000);
+  };
+  
   const handleSlideMouseLeave = () => {
     if (hoverTimeoutRef.current) {
       clearTimeout(hoverTimeoutRef.current);
     }
-    hoverTimeoutRef.current = setTimeout(() => {
-      setHoveredIndex(null); // Сбрасываем hoveredIndex после завершения анимации
-    }, 2000); // Задержка 2 секунды для fade-out
+    setHoveredIndex(null);
   };
 
   useEffect(() => {
-   if (!visibleStates[0] || totalSlides <= 3) {
-  //  if (totalSlides <= 3) {
+    if (!visibleStates[0] || totalSlides <= 3) {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
       }
       return;
     }
 
-    // Начальная прокрутка
     const timeoutId = setTimeout(
       () => {
         if (!isPaused) {
@@ -131,7 +143,7 @@ const TechStackSlider = ({
         }
       },
       isFirstSlide ? scrollSpeed / 2 : scrollSpeed
-    ); // Начальная задержка
+    );
 
     return () => {
       clearTimeout(timeoutId);
@@ -142,7 +154,15 @@ const TechStackSlider = ({
         clearTimeout(resumeTimeoutRef.current);
       }
     };
-  }, [totalSlides, isFirstSlide, currentIndex, scrollSpeed, isPaused, startInterval, visibleStates]);
+  }, [
+    totalSlides,
+    isFirstSlide,
+    currentIndex,
+    scrollSpeed,
+    isPaused,
+    startInterval,
+    visibleStates,
+  ]);
 
   useEffect(() => {
     if (!isTransitioning) {
@@ -172,15 +192,7 @@ const TechStackSlider = ({
             <div
               key={`slide-${index}`}
               className={styles.slide}
-              onMouseEnter={() => {
-                const now = Date.now();
-                if (now - lastLoadedTime >= 2000) {
-                  if (hoverTimeoutRef.current) {
-                    clearTimeout(hoverTimeoutRef.current);
-                  }
-                  setHoveredIndex(index);
-                }
-              }}
+              onMouseEnter={() => handleCardHover(index)}
               onMouseLeave={handleSlideMouseLeave}
             >
               <TechStackCard
@@ -194,10 +206,14 @@ const TechStackSlider = ({
         </div>
       </div>
       <div className={styles.indicatorWrapper}>
-      <GistViewer
-          content={hoveredIndex !== null ? extendedSlides[hoveredIndex]?.content : undefined}
+        <GistViewer
+          content={
+            hoveredIndex !== null
+              ? extendedSlides[hoveredIndex]?.content
+              : undefined
+          }
           isVisible={hoveredIndex !== null}
-          onLoaded={() => setLastLoadedTime(Date.now())} // Устанавливаем cooldown после анимации
+          onLoaded={() => setLastLoadedTime(Date.now())}
         />
         <SpeedIndicator
           scrollSpeed={scrollSpeed}

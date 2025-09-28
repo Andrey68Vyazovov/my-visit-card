@@ -1,33 +1,53 @@
 .viewerContainer {
   position: absolute;
-  bottom: -250px; /* Частично ниже слайдера */
-  left: 0;
+  bottom: -400px;
+  left: 70px;
   width: 100%;
-  max-height: 410px; /* Частично видимый */
+  max-height: 460px;
   overflow-y: auto;
-  background: transparent; /* Затемнённый фон */
+  background: transparent;
   padding: 16px;
   border-radius: 0 0 8px 8px;
-  filter: brightness(0%); /* Начало анимации */
+  filter: brightness(0%);
   opacity: 0; 
-  transition: filter 2s ease-in-out, opacity 2s ease-in-out;/* Анимация яркости 2s в обе стороны */
-  z-index: -1; /* Под слайдером */
+  transition: filter 2s ease-in-out, opacity 2s ease-in-out;
+  z-index: -1;
+  scroll-behavior: smooth;
   scrollbar-width: none; 
+  
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 20%,
+    black 80%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 20%,
+    black 80%,
+    transparent 100%
+  );
 }
 
 .viewerContainer::-webkit-scrollbar {
-  display: none; /* Скрыть скроллбар в Chrome/Safari */
+  display: none;
+}
+
+.viewerContainer.transitioning {
+  transition: filter 1s ease-in-out, opacity 1s ease-in-out;
 }
 
 
 .visible {
-  filter: brightness(100%); /* Полная яркость после fade-in */
+  filter: brightness(100%);
   opacity: 1;
 }
 
 .hidden {
   filter: brightness(0%);
-  opacity: 0; /* Скрыть после fade-out */
+  opacity: 0;
 }
 
 .error {
@@ -37,8 +57,30 @@
 }
 
 .codeBlock {
-  opacity: 0.5; /* Лёгкое затемнение для "фонового" эффекта */
+  opacity: 0.5;
   pre {
     background: transparent !important;
+  }
+}
+
+.scrollableContent {
+  animation: scrollContent 70s infinite alternate ease-in-out; /* Автоматическая анимация */
+}
+
+@keyframes scrollContent {
+  0% {
+    transform: translateY(0); /* Начало: текст внизу */
+  }
+  2% {
+    transform: translateY(0); /* Пауза в начале */
+  }
+  50% {
+    transform: translateY(calc(-100% + 460px)); /* Двигаем вверх */
+  }
+  55% {
+    transform: translateY(calc(-100% + 460px)); /* Пауза вверху */
+  }
+  100% {
+    transform: translateY(0); /* Возвращаемся вниз */
   }
 }
