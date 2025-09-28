@@ -67,8 +67,8 @@ export const stackArray: TechStackItem[] = [
 export const myWorkData = {
   title: 'My Work',
   frames: [
-    'Deployed scalable, responsive web and hybrid mobile apps that served hundreds of thousands of clients.',
-    'Focused on high-performing applications with intuitive and dynamic interactions. I also have a passion for data analytics and visualization.',
+    'Я Frontend-разработчик с 4-летним опытом создания сложных отзывчивых SPA и SSR-приложений на стеке React / Next.js / TypeScript. С фокусом на производительность и пользовательский опыт.',
+    'Понимаю и могу настроить весь процесс — от создания интерфейсов до оптимизации (бандла, рендеринга, кеширования). Работаю с метриками Core Web Vitals, чтобы напрямую влиять на удобство, конверсию и лояльность.',
   ],
   videoUrl: 'https://www.pexels.com/download/video/2278095/',
 };
@@ -146,9 +146,18 @@ export const workCardsData: WorkCardData[] = [
     ],  },
 ];
 
+export const contactsTitle =`По вопросам сотрудничества 
+                            и проектов обращайтесь 
+                            в Telegram — это самый 
+                            быстрый способ связаться 
+                            со мной. Отвечаю 
+                            в течение дня, остальные 
+                            способы связи — 
+                            по договоренности.`;
+
 export const contactsData: ContactItem[] = [
-  { type: 'phone', action: '+1234567890' },
-  { type: 'email', action: 'email@example.com' },
-  { type: 'telegram', action: 'https://t.me/username' },
-  { type: 'github', action: 'https://github.com/username' },
+  { type: 'email', action: 'andrej.vyazovov@yandex.ru' },
+  { type: 'phone', action: '+7(953)125-63-00' },
+  { type: 'telegram', action: 'https://t.me/@vavrao68' },
+  { type: 'github', action: 'https://github.com/Andrey68Vyazovov' },
 ];

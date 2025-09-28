@@ -1,23 +1,16 @@
-import Footer from '../Footer';
-import styles from './index.module.scss';
-import TestContent from './TestContent';
+import styles from "./index.module.scss";
+import Header from "./Header";
+import CvContent from "./CvContent";
+import Footer from "./Footer";
 
-const Content = () => {
+const MainContent = () => {
   return (
     <div className={styles.content}>
-      <header className={styles.header}>
-        {/* Хедер высотой 100px */}
-        {/* <h1>Header</h1>*/}
-        <h1></h1>
-      </header>
-      
-      <main className={styles.main}>
-        {/* Основной контент с тестовым блоком */}
-        <TestContent />
-      </main>   
+      <Header />
+      <CvContent />
       <Footer />
     </div>
   );
 };
 
-export default Content;
+export default MainContent;

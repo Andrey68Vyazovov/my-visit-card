@@ -27,6 +27,21 @@ const TechStackSlider = ({
   const resumeTimeoutRef = useRef<number | null>(null);
   const hoverTimeoutRef = useRef<number | null>(null);
   const [isSwitching, setIsSwitching] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Проверяем размер экрана
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsMobile(window.innerWidth < 1440);
+    };
+
+    checkScreenSize();
+    window.addEventListener('resize', checkScreenSize);
+
+    return () => {
+      window.removeEventListener('resize', checkScreenSize);
+    };
+  }, []);
 
   const extendedSlides =
     data.length > 0
@@ -40,6 +55,8 @@ const TechStackSlider = ({
   const totalSlides = extendedSlides.length;
 
   const handleSpeedChange = () => {
+    if (isMobile) return; // Отключаем смену скорости на мобильных
+    
     const speeds = [4000, 2000, 1000];
     const currentIndex = speeds.indexOf(scrollSpeed);
     const nextIndex = (currentIndex + 1) % speeds.length;
@@ -47,6 +64,8 @@ const TechStackSlider = ({
   };
 
   const startInterval = useCallback(() => {
+    if (isMobile) return; // Отключаем интервал на мобильных
+    
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
     }
@@ -76,9 +95,11 @@ const TechStackSlider = ({
         ? scrollSpeed / 2
         : scrollSpeed
     );
-  }, [isFirstSlide, currentIndex, scrollSpeed, totalSlides]);
+  }, [isMobile, isFirstSlide, currentIndex, scrollSpeed, totalSlides]);
 
   const handleMouseEnter = () => {
+    if (isMobile) return; // Отключаем паузу на мобильных
+    
     setIsPaused(true);
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
@@ -91,6 +112,8 @@ const TechStackSlider = ({
   };
 
   const handleMouseLeave = () => {
+    if (isMobile) return; // Отключаем возобновление на мобильных
+    
     setIsPaused(false);
     setHoveredIndex(null);
     
@@ -100,6 +123,8 @@ const TechStackSlider = ({
   };
 
   const handleCardHover = (index: number) => {
+    if (isMobile) return; // Отключаем hover эффекты на мобильных
+    
     const now = Date.now();
     
     if (isSwitching || now - lastLoadedTime < 2000) {
@@ -122,6 +147,8 @@ const TechStackSlider = ({
   };
   
   const handleSlideMouseLeave = () => {
+    if (isMobile) return; // Отключаем на мобильных
+    
     if (hoverTimeoutRef.current) {
       clearTimeout(hoverTimeoutRef.current);
     }
@@ -129,7 +156,7 @@ const TechStackSlider = ({
   };
 
   useEffect(() => {
-    if (!visibleStates[0] || totalSlides <= 3) {
+    if (isMobile || !visibleStates[0] || totalSlides <= 3) {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
       }
@@ -155,6 +182,7 @@ const TechStackSlider = ({
       }
     };
   }, [
+    isMobile,
     totalSlides,
     isFirstSlide,
     currentIndex,
@@ -165,63 +193,93 @@ const TechStackSlider = ({
   ]);
 
   useEffect(() => {
-    if (!isTransitioning) {
-      const timeout = setTimeout(() => {
-        setIsTransitioning(true);
-      }, 50);
-      return () => clearTimeout(timeout);
+    if (isMobile || !isTransitioning) {
+      return;
     }
-  }, [isTransitioning]);
+    
+    const timeout = setTimeout(() => {
+      setIsTransitioning(true);
+    }, 50);
+    return () => clearTimeout(timeout);
+  }, [isMobile, isTransitioning]);
+
+  // Для мобильной версии используем оригинальные данные (без дублирования)
+  const displayData = isMobile ? data : extendedSlides;
 
   return (
-    <div className={styles.sliderWrapper}>
-      <div
-        ref={setRef(0)}
-        className={styles.sliderContainer}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-      >
+    <>
+      <div className={`${styles.title}`}>My Expertise</div>
+      <div className={styles.sliderWrapper}>
         <div
-          className={styles.sliderTrack}
-          style={{
-            transform: `translateX(${-currentIndex * slideWidth}px)`,
-            transition: isTransitioning ? "transform 1s ease-in-out" : "none",
-          }}
+          ref={setRef(0)}
+          className={`${styles.sliderContainer} ${isMobile ? styles.mobileContainer : ''}`}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
         >
-          {extendedSlides.map((item, index) => (
-            <div
-              key={`slide-${index}`}
-              className={styles.slide}
-              onMouseEnter={() => handleCardHover(index)}
-              onMouseLeave={handleSlideMouseLeave}
-            >
-              <TechStackCard
-                logo={item.logo}
-                title={item.title}
-                description={item.description}
-                gist={item.gist}
-              />
+          {isMobile ? (
+            // Мобильная версия - вертикальный список
+            <div className={styles.verticalList}>
+              {displayData.map((item, index) => (
+                <div
+                  key={`mobile-slide-${index}`}
+                  className={styles.verticalSlide}
+                >
+                  <TechStackCard
+                    logo={item.logo}
+                    title={item.title}
+                    description={item.description}
+                    gist={item.gist}
+                  />
+                </div>
+              ))}
             </div>
-          ))}
+          ) : (
+            // Десктопная версия - горизонтальный слайдер
+            <div
+              className={styles.sliderTrack}
+              style={{
+                transform: `translateX(${-currentIndex * slideWidth}px)`,
+                transition: isTransitioning ? "transform 1s ease-in-out" : "none",
+              }}
+            >
+              {displayData.map((item, index) => (
+                <div
+                  key={`slide-${index}`}
+                  className={styles.slide}
+                  onMouseEnter={() => handleCardHover(index)}
+                  onMouseLeave={handleSlideMouseLeave}
+                >
+                  <TechStackCard
+                    logo={item.logo}
+                    title={item.title}
+                    description={item.description}
+                    gist={item.gist}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
         </div>
+        {!isMobile && (
+          <div className={styles.indicatorWrapper}>
+            <GistViewer
+              content={
+                hoveredIndex !== null
+                  ? extendedSlides[hoveredIndex]?.content
+                  : undefined
+              }
+              isVisible={hoveredIndex !== null}
+              onLoaded={() => setLastLoadedTime(Date.now())}
+            />
+            <SpeedIndicator
+              scrollSpeed={scrollSpeed}
+              isPaused={isPaused}
+              onSpeedChange={handleSpeedChange}
+            />
+          </div>
+        )}
       </div>
-      <div className={styles.indicatorWrapper}>
-        <GistViewer
-          content={
-            hoveredIndex !== null
-              ? extendedSlides[hoveredIndex]?.content
-              : undefined
-          }
-          isVisible={hoveredIndex !== null}
-          onLoaded={() => setLastLoadedTime(Date.now())}
-        />
-        <SpeedIndicator
-          scrollSpeed={scrollSpeed}
-          isPaused={isPaused}
-          onSpeedChange={handleSpeedChange}
-        />
-      </div>
-    </div>
+    </>
   );
 };
 

@@ -25,7 +25,6 @@ const MyWork = () => {
     }, 300);
   };
 
-
   return (
     <section className={styles.myWorkSection}>
       <div className={styles.container}>

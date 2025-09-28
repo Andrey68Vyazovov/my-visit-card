@@ -1,0 +1,135 @@
+:root {
+  --name-font-size: 120px;
+  --subtitle-font-size: 25px;
+  --hero-margin-bottom: 400px;
+}
+
+.heroSection {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 300px;
+  margin-bottom: var(--hero-margin-bottom);
+}
+
+// Десктопная версия (по умолчанию)
+.desktopLayout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.mobileLayout {
+  display: none;
+}
+
+.name {
+  font-size: var(--name-font-size);
+  color: white;
+  font-weight: bold;
+  text-shadow: 2px 2px 5px rgba(115, 62, 248, 0.7);
+  letter-spacing: 5px;
+  text-align: center;
+  line-height: 1.1;
+}
+
+.titleContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 20px;
+}
+
+.title {
+  font-size: var(--subtitle-font-size);
+  color: white;
+  font-weight: 300;
+  text-shadow: 2px 2px 4px rgba(115, 62, 248, 0.7);
+  letter-spacing: 3px;
+  opacity: 0.9;
+  white-space: nowrap;
+}
+
+.terminal {
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 1439px) {
+  :root {
+    --name-font-size: 90px;
+    --subtitle-font-size: 20px;
+    --hero-margin-bottom: 450px;
+  }
+}
+
+@media (max-width: 1079px) {
+  :root {
+    --name-font-size: 70px;
+    --subtitle-font-size: 18px;
+    --hero-margin-bottom: 350px;
+  }
+
+  .desktopLayout {
+    display: none;
+  }
+
+  .mobileLayout {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+  }
+
+  .name {
+    max-width: 450px;
+    word-wrap: break-word;
+    white-space: normal;
+    line-height: 1.2;
+    text-align: center;
+  }
+
+  .title {
+    white-space: normal;
+    text-align: center;
+    font-size: var(--subtitle-font-size);
+  }
+}
+
+@media (max-width: 767px) {
+  :root {
+    --name-font-size: 50px;
+    --subtitle-font-size: 16px;
+    --hero-margin-bottom: 300px;
+  }
+
+  .heroSection {
+    margin-top: 200px;
+  }
+
+  .name {
+    max-width: 300px;
+    letter-spacing: 3px;
+  }
+
+  .mobileLayout {
+    gap: 20px;
+  }
+}
+
+@media (max-width: 479px) {
+  :root {
+    --name-font-size: 40px;
+    --subtitle-font-size: 14px;
+    --hero-margin-bottom: 250px;
+  }
+
+  .name {
+    max-width: 250px;
+    letter-spacing: 2px;
+  }
+}

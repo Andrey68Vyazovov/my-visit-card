@@ -1,8 +1,10 @@
-// src/components/Content/Terminal/index.module.scss
+:root {
+  --terminal-font-size: 25px;
+}
+
 .terminal {
   font-family: 'Courier New', monospace;
-  //width: 600px;
-  font-size: 25px;
+  font-size: var(--terminal-font-size);
   color: white;
   font-weight: bold;
   text-shadow: 0 0 10px rgba(115, 62, 248, 0.8);
@@ -20,4 +22,10 @@
 @keyframes blink {
   0%, 50% { opacity: 1; }
   51%, 100% { opacity: 0; }
+}
+
+@media (max-width: 1439px) {
+  :root {
+    --terminal-font-size: 20px;
+  }
 }

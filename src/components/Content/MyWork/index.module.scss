@@ -1,6 +1,6 @@
 .myWorkSection {
   width: 100%;
-  padding: 60px 0 400px;
+  padding: 60px 0 200px;
 
   @media (max-width: 768px) {
     padding: 40px 0;
@@ -16,11 +16,10 @@
   align-items: flex-start;
   gap: 40px;
 
-  @media (max-width: 1024px) {
+  @media (max-width: 1080px) {
     flex-direction: column;
     align-items: center;
     gap: 30px;
-    text-align: center;
   }
 }
 
@@ -28,19 +27,43 @@
   display: flex;
   flex: 1;
   max-width: 100%;
+  align-items: flex-start;
+  gap: 40px;
+  padding-bottom: 30px;
 
+  @media (max-width: 1079px) {
+    max-width: 60%;
+    gap: 30px;
+  }
 }
 
 .title {
-  margin: 0 0 24px;
+  margin: 0;
   font-size: 75px;
   font-weight: bold;
   color: white;
-  text-align: left;
+  align-self: center;
+ // writing-mode: horizontal-tb; // По умолчанию горизонтальный текст
+
+  @media (max-width: 1079px) {
+    writing-mode: vertical-lr; // Вертикальный текст слева направо
+    text-orientation: mixed;
+    transform: rotate(180deg); // Переворачиваем чтобы текст шел снизу вверх
+    font-size: 30px;
+    line-height: 1;
+    letter-spacing: 3px;
+    margin: 0;
+    align-self: flex-start; // Остается слева
+  }
 
   @media (max-width: 1024px) {
-    text-align: center;
-    font-size: 2rem;
+    align-self: center; // На очень маленьких центрируем
+    transform: rotate(180deg) translateX(0); // Сохраняем переворот
+  }
+
+  @media (max-width: 579px) {
+    font-size: 50px;
+    letter-spacing: 2px;
   }
 }
 
@@ -48,6 +71,16 @@
   font-size: 1.1rem;
   line-height: 1.6;
   color: white;
+  flex: 1;
+
+  @media (max-width: 1079px) {
+    font-size: 1rem;
+  }
+
+  @media (max-width: 579px) {
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
 }
 
 .frame {
@@ -62,7 +95,7 @@
     top: 0;
     bottom: 0;
     width: 4px;
-    background-color: #007bff; // Синий акцент для фреймов
+    background-color: #007bff;
     border-radius: 2px;
   }
 
@@ -73,6 +106,15 @@
   @media (max-width: 1024px) {
     text-align: left;
     padding-left: 20px;
+  }
+
+  @media (max-width: 579px) {
+    padding-left: 15px;
+    margin-bottom: 12px;
+    
+    &:before {
+      width: 3px;
+    }
   }
 }
 

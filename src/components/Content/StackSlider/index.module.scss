@@ -7,12 +7,27 @@
   margin-bottom: 450px;
 }
 
+.title {
+  font-size: 75px;
+  color: white;
+  font-weight: 600;
+  text-shadow: 2px 2px 4px rgba(115, 62, 248, 0.7);
+}
+
 .sliderContainer {
   width: 1080px;
   height: 300px;
   overflow: hidden;
   position: relative;
   border: 2px solid #a3a3a3;
+
+  &.mobileContainer {
+    width: 400px; // Уже для мобильной версии
+    height: auto;
+    min-height: 300px;
+    overflow: visible;
+    border: none;
+  }
 }
 
 .sliderTrack {
@@ -21,7 +36,6 @@
   width: max-content;
   height: 100%;
   will-change: transform;
-
 }
 
 .slide {
@@ -30,6 +44,45 @@
   height: 300px;
 }
 
+// Стили для мобильной вертикальной версии
+.verticalList {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  width: 100%;
+}
+
+.verticalSlide {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  min-height: 100px;
+}
+
 .indicatorWrapper {
   margin-right: 0;
+}
+
+// Медиа-запрос для мобильной версии
+@media (max-width: 1439px) {
+  .sliderWrapper {
+    align-items: center;
+    margin-bottom: 200px;
+  }
+
+  .title {
+    font-size: 60px;
+    text-align: center;
+    margin-bottom: 30px;
+  }
+}
+
+@media (max-width: 767px) {
+  .title {
+    font-size: 40px;
+  }
+
+  .sliderContainer.mobileContainer {
+    width: 320px;
+  }
 }
