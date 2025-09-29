@@ -47,26 +47,18 @@ const WorkModal = ({ work, isOpen, onClose }: WorkModalProps) => {
         <button className={styles.closeButton} onClick={onClose}><FaTimes /></button>
         
         <div className={styles.modalLayout}>
-          {/* Верхняя часть - слайдер (60%) */}
           <div className={styles.sliderSection}>
           <Slider 
               images={work.images}
               currentSlide={currentSlide}
               onSlideChange={setCurrentSlide}
+              onClose={onClose}
             />
-          </div>
-          
-          {/* Нижняя часть - текстовый контент (40%) */}
+          </div>   
           <div className={styles.contentSection}>
             <div className={styles.modalHeader}>
               <h3 className={styles.modalTitle}>{work.title}</h3>
-              {/* <div className={styles.modalStack}>
-                {work.stack.map((tech, index) => (
-                  <span key={index} className={styles.techTag}>{tech}</span>
-                ))}
-              </div> */}
             </div>
-            
             <div className={styles.modalBody}>
               <div className={styles.projectInfo}>
                 <p>{work.images[currentSlide]?.description}</p>
