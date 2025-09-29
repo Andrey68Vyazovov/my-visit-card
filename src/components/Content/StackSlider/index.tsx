@@ -112,7 +112,7 @@ const TechStackSlider = ({
   };
 
   const handleMouseLeave = () => {
-    if (isMobile) return; // Отключаем возобновление на мобильных
+    if (isMobile) return;
     
     setIsPaused(false);
     setHoveredIndex(null);
@@ -123,7 +123,7 @@ const TechStackSlider = ({
   };
 
   const handleCardHover = (index: number) => {
-    if (isMobile) return; // Отключаем hover эффекты на мобильных
+    if (isMobile) return;
     
     const now = Date.now();
     
@@ -147,7 +147,7 @@ const TechStackSlider = ({
   };
   
   const handleSlideMouseLeave = () => {
-    if (isMobile) return; // Отключаем на мобильных
+    if (isMobile) return;
     
     if (hoverTimeoutRef.current) {
       clearTimeout(hoverTimeoutRef.current);
@@ -203,7 +203,6 @@ const TechStackSlider = ({
     return () => clearTimeout(timeout);
   }, [isMobile, isTransitioning]);
 
-  // Для мобильной версии используем оригинальные данные (без дублирования)
   const displayData = isMobile ? data : extendedSlides;
 
   return (
@@ -217,7 +216,6 @@ const TechStackSlider = ({
           onMouseLeave={handleMouseLeave}
         >
           {isMobile ? (
-            // Мобильная версия - вертикальный список
             <div className={styles.verticalList}>
               {displayData.map((item, index) => (
                 <div
@@ -234,7 +232,6 @@ const TechStackSlider = ({
               ))}
             </div>
           ) : (
-            // Десктопная версия - горизонтальный слайдер
             <div
               className={styles.sliderTrack}
               style={{
