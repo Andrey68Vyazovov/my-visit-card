@@ -50,23 +50,24 @@
   font-size: 75px;
   font-weight: bold;
   color: white;
+  text-shadow: 2px 2px 4px rgba(115, 62, 248, 0.7);
+  opacity: 0.9;
   align-self: center;
- // writing-mode: horizontal-tb; // По умолчанию горизонтальный текст
 
   @media (max-width: 1079px) {
-    writing-mode: vertical-lr; // Вертикальный текст слева направо
+    writing-mode: vertical-lr;
     text-orientation: mixed;
-    transform: rotate(180deg); // Переворачиваем чтобы текст шел снизу вверх
+    transform: rotate(180deg);
     font-size: 30px;
     line-height: 1;
     letter-spacing: 3px;
     margin: 0;
-    align-self: flex-start; // Остается слева
+    align-self: flex-start;
   }
 
   @media (max-width: 1024px) {
-    align-self: center; // На очень маленьких центрируем
-    transform: rotate(180deg) translateX(0); // Сохраняем переворот
+    align-self: center;
+    transform: rotate(180deg) translateX(0);
   }
 
   @media (max-width: 579px) {
@@ -133,7 +134,7 @@
   align-items: flex-start;
 
   @media (max-width: 1024px) {
-    order: -1; // Видео наверх в мобильной версии
+    order: -1;
   }
 }
 

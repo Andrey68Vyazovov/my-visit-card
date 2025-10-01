@@ -8,12 +8,13 @@ export interface TechStackItem {
 
 export interface WorkImage {
   src: string;
+  title_description?: string;
   description: string;
 }
 
 export interface WorkCardData {
   title: string;
-  description: string;
+  description?: string;
   stack: string[];
   images: WorkImage[];
 }

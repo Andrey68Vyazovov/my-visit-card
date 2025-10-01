@@ -77,12 +77,45 @@
   border-bottom: 1px solid #e5e5e5;
 }
 
+.headerContent {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  height: 100%;
+}
+
+
+.titleBlock {
+  color: white;
+  font-size: 24px;
+  letter-spacing: 1px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.divider {
+  width: 4px;
+  height: 40px;
+  background-color: #007bff;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.descriptionBlock {
+  color: #ccc;
+  font-size: 15px;
+  letter-spacing: 1px;
+  line-height: 1.4;
+  flex: 1;
+}
+
 .modalTitle {
   margin: 0;
   color: white;
   font-size: 24px;
   letter-spacing: 1px;
   font-weight: 600;
+  margin-bottom: 8px;
 }
 
 .modalStack {
@@ -124,7 +157,6 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-// Анимации
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -145,7 +177,6 @@
   }
 }
 
-// Анимация закрытия
 .modalOverlay.closing {
   animation: fadeOut 0.2s ease-in forwards;
 }
@@ -181,8 +212,8 @@
 }
 
 .sliderSection {
-  flex: 0 0 65%; // 60% высоты
-  min-height: 0; // важно для flexbox
+  flex: 0 0 65%;
+  min-height: 0;
   background: #f8f9fa;
   border-radius: 8px 8px 0 0;
   display: flex;
@@ -234,7 +265,7 @@
 }
 
 .contentSection {
-  flex: 0 0 35%; // 40% высоты
+  flex: 0 0 35%;
   min-height: 0;
   overflow-y: auto;
   display: flex;
@@ -256,7 +287,6 @@
   }
 }
 
-// Адаптивность для мобильных устройств
 @media (max-height: 600px) {
   .sliderSection {
     flex: 0 0 50%;
