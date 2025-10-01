@@ -1,4 +1,4 @@
-import Terminal from "../../Terminal";
+import Terminal from "./Terminal";
 import styles from "./index.module.scss";
 
 const HeroSection = () => {

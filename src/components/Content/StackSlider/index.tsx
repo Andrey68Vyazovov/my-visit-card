@@ -1,10 +1,13 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useScrollAnimation } from "../../../hooks/useScrollAnimation";
-import TechStackCard from "../StackCard";
+
+import GistViewer from "./GistViewer";
 import SpeedIndicator from "./SpeedIndicator";
 import styles from "./index.module.scss";
+
+import TechStackCard from "../StackCard";
 import { TechStackItem } from "../types";
-import GistViewer from "./GistViewer";
+
+import { useScrollAnimation } from "../../../hooks/useScrollAnimation";
 
 interface TechStackProps {
   data: TechStackItem[];
@@ -13,7 +16,7 @@ interface TechStackProps {
 
 const TechStackSlider = ({
   data,
-  scrollSpeed: initialScrollSpeed = 4000,
+  scrollSpeed: initialScrollSpeed = 2000,
 }: TechStackProps) => {
   const { setRef, visibleStates } = useScrollAnimation(1);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -29,7 +32,6 @@ const TechStackSlider = ({
   const [isSwitching, setIsSwitching] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
-  // Проверяем размер экрана
   useEffect(() => {
     const checkScreenSize = () => {
       setIsMobile(window.innerWidth < 1440);
@@ -55,7 +57,7 @@ const TechStackSlider = ({
   const totalSlides = extendedSlides.length;
 
   const handleSpeedChange = () => {
-    if (isMobile) return; // Отключаем смену скорости на мобильных
+    if (isMobile) return;
     
     const speeds = [4000, 2000, 1000];
     const currentIndex = speeds.indexOf(scrollSpeed);
@@ -64,7 +66,7 @@ const TechStackSlider = ({
   };
 
   const startInterval = useCallback(() => {
-    if (isMobile) return; // Отключаем интервал на мобильных
+    if (isMobile) return;
     
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
@@ -98,7 +100,7 @@ const TechStackSlider = ({
   }, [isMobile, isFirstSlide, currentIndex, scrollSpeed, totalSlides]);
 
   const handleMouseEnter = () => {
-    if (isMobile) return; // Отключаем паузу на мобильных
+    if (isMobile) return;
     
     setIsPaused(true);
     if (intervalRef.current) {
@@ -115,7 +117,9 @@ const TechStackSlider = ({
     if (isMobile) return;
     
     setIsPaused(false);
+    setTimeout(() => {
     setHoveredIndex(null);
+    }, 2500);
     
     resumeTimeoutRef.current = setTimeout(() => {
       startInterval();

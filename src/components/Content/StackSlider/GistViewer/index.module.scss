@@ -64,7 +64,9 @@
 }
 
 .scrollableContent {
-  animation: scrollContent 70s infinite alternate ease-in-out; /* Автоматическая анимация */
+  height: 1400px;
+  overflow-y: hidden;
+  animation: scrollContent 60s linear infinite;
 }
 
 @keyframes scrollContent {
@@ -74,13 +76,7 @@
   2% {
     transform: translateY(0); /* Пауза в начале */
   }
-  50% {
-    transform: translateY(calc(-100% + 460px)); /* Двигаем вверх */
-  }
-  55% {
-    transform: translateY(calc(-100% + 460px)); /* Пауза вверху */
-  }
   100% {
-    transform: translateY(0); /* Возвращаемся вниз */
+    transform: translateY(calc(-100% + 460px)); /* Двигаем вверх */
   }
 }

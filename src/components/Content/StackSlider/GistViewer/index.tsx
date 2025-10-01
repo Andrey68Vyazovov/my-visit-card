@@ -11,9 +11,11 @@ interface GistViewerProps {
 
 const GistViewer = ({ content, isVisible, onLoaded }: GistViewerProps) => {
   const [displayedContent, setDisplayedContent] = useState<string | undefined>(undefined);
+  const [animationKey, setAnimationKey] = useState(0);
 
   useEffect(() => {
     if (isVisible && content && displayedContent !== content) {
+      setAnimationKey(prev => prev + 1);
       setDisplayedContent(content);
       const timer = setTimeout(() => {
         onLoaded();
@@ -34,7 +36,7 @@ const GistViewer = ({ content, isVisible, onLoaded }: GistViewerProps) => {
       className={`${styles.viewerContainer} ${isVisible && hasContent ? styles.visible : styles.hidden}`}
     >
       {hasContent && (
-        <div className={styles.scrollableContent}>
+        <div key={animationKey} className={styles.scrollableContent}>
           <SyntaxHighlighter
             language="typescript"
             style={tomorrow}
