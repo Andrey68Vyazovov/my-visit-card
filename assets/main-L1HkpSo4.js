@@ -104,7 +104,7 @@ export function Text({
     
 - TypeScript для типобезопасности
     
-- Next.js Image для оптимизации`,gist:"https://gist.github.com/Andrey68Vyazovov/9e1cf8168aeff338035055fb342229f2",content:`import { GetServerSideProps } from 'next';
+- Next.js Image для оптимизации`,gist:"https://gist.github.com/Andrey68Vyazovov/4f729d77d15a7149d345032845c03b09",content:`import { GetServerSideProps } from 'next';
 import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 
