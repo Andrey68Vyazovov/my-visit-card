@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import GistViewer from "./GistViewer";
 import SpeedIndicator from "./SpeedIndicator";
@@ -16,21 +16,40 @@ interface TechStackProps {
 
 const TechStackSlider = ({
   data,
-  scrollSpeed: initialScrollSpeed = 2000,
+  scrollSpeed: initialScrollSpeed = 4000,
 }: TechStackProps) => {
   const { setRef, visibleStates } = useScrollAnimation(1);
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [, forceUpdate] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(true);
   const [isFirstSlide, setIsFirstSlide] = useState(true);
   const [scrollSpeed, setScrollSpeed] = useState(initialScrollSpeed);
   const [isPaused, setIsPaused] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [lastLoadedTime, setLastLoadedTime] = useState<number>(0);
-  const intervalRef = useRef<number | null>(null);
-  const resumeTimeoutRef = useRef<number | null>(null);
-  const hoverTimeoutRef = useRef<number | null>(null);
   const [isSwitching, setIsSwitching] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+
+  const currentIndexRef = useRef(0);
+  const intervalRef = useRef<number | null>(null);
+  const resumeTimeoutRef = useRef<number | null>(null);
+  const isManualScrollRef = useRef(false);
+  const initialRandomSetRef = useRef(false); // флаг для первоначального рандома
+
+  const extendedSlides = useMemo(
+    () => (data.length > 0 ? [...data, ...data.slice(0, 3)] : []),
+    [data]
+  );
+
+  const slideWidth = 360;
+  const totalSlides = extendedSlides.length;
+
+  const setCurrentIndex = useCallback((newIndex: number) => {
+    currentIndexRef.current = newIndex;
+    forceUpdate((prev) => prev + 1);
+  }, []);
+
+  const canScrollPrev = currentIndexRef.current > 0;
+  const canScrollNext = currentIndexRef.current < totalSlides - 6;
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -38,27 +57,43 @@ const TechStackSlider = ({
     };
 
     checkScreenSize();
-    window.addEventListener('resize', checkScreenSize);
+    window.addEventListener("resize", checkScreenSize);
 
     return () => {
-      window.removeEventListener('resize', checkScreenSize);
+      window.removeEventListener("resize", checkScreenSize);
     };
   }, []);
 
-  const extendedSlides =
-    data.length > 0
-      ? [
-          ...data,
-          ...data.slice(0, 3),
-        ]
-      : [];
+  // Функция для получения случайного индекса с гистом
+  const getRandomGistIndex = useCallback(() => {
+    const gistIndices = extendedSlides
+      .map((slide, index) => (slide.content ? index : -1))
+      .filter((index) => index !== -1);
 
-  const slideWidth = 360;
-  const totalSlides = extendedSlides.length;
+    if (gistIndices.length === 0) return null;
+
+    const randomIndex =
+      gistIndices[Math.floor(Math.random() * gistIndices.length)];
+    return randomIndex;
+  }, [extendedSlides]);
+
+  // Установка первоначального случайного гиста при монтировании
+  useEffect(() => {
+    if (
+      !isMobile &&
+      visibleStates[0] &&
+      data.length > 0 &&
+      !initialRandomSetRef.current
+    ) {
+      const randomIndex = getRandomGistIndex();
+      setHoveredIndex(randomIndex || null);
+      initialRandomSetRef.current = true; // устанавливаем флаг, что первоначальный рандом выполнен
+    }
+  }, [isMobile, visibleStates, data.length, getRandomGistIndex]);
 
   const handleSpeedChange = () => {
     if (isMobile) return;
-    
+
     const speeds = [4000, 2000, 1000];
     const currentIndex = speeds.indexOf(scrollSpeed);
     const nextIndex = (currentIndex + 1) % speeds.length;
@@ -67,42 +102,41 @@ const TechStackSlider = ({
 
   const startInterval = useCallback(() => {
     if (isMobile) return;
-    
+
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
     }
     intervalRef.current = setInterval(
       () => {
-        setCurrentIndex((prev) => {
-          const nextIndex = prev + 1;
+        const nextIndex = currentIndexRef.current + 1;
 
-          if (nextIndex >= totalSlides - 3) {
-            setTimeout(() => {
-              setIsTransitioning(false);
-              setCurrentIndex(0);
-              setIsFirstSlide(true);
-            }, 1000);
-            return nextIndex;
-          }
-
+        if (nextIndex >= totalSlides - 3) {
+          setTimeout(() => {
+            setIsTransitioning(false);
+            setCurrentIndex(0);
+            setIsFirstSlide(true);
+          }, 1000);
+        } else {
           if (isFirstSlide) {
             setIsFirstSlide(false);
           }
-
           setIsTransitioning(true);
-          return nextIndex;
-        });
+        }
+
+        setCurrentIndex(nextIndex);
       },
-      isFirstSlide || currentIndex >= totalSlides - 3
+      isFirstSlide || currentIndexRef.current >= totalSlides - 3
         ? scrollSpeed / 2
         : scrollSpeed
     );
-  }, [isMobile, isFirstSlide, currentIndex, scrollSpeed, totalSlides]);
+  }, [isMobile, isFirstSlide, scrollSpeed, totalSlides, setCurrentIndex]);
 
-  const handleMouseEnter = () => {
+  // Функция для остановки слайдера
+  const stopSlider = useCallback(() => {
     if (isMobile) return;
-    
+
     setIsPaused(true);
+
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
       intervalRef.current = null;
@@ -111,54 +145,131 @@ const TechStackSlider = ({
       clearTimeout(resumeTimeoutRef.current);
       resumeTimeoutRef.current = null;
     }
-  };
+  }, [isMobile]);
 
-  const handleMouseLeave = () => {
+  // Функция для запуска слайдера с задержкой
+  const startSliderWithDelay = useCallback(() => {
     if (isMobile) return;
-    
+
     setIsPaused(false);
-    setTimeout(() => {
-    setHoveredIndex(null);
-    }, 2500);
-    
+
+    if (resumeTimeoutRef.current) {
+      clearTimeout(resumeTimeoutRef.current);
+    }
+
     resumeTimeoutRef.current = setTimeout(() => {
       startInterval();
     }, 3000);
-  };
+  }, [isMobile, startInterval]);
 
-  const handleCardHover = (index: number) => {
-    if (isMobile) return;
-    
-    const now = Date.now();
-    
-    if (isSwitching || now - lastLoadedTime < 2000) {
-      return;
+  // Функции для ручной прокрутки
+  const scrollToNext = useCallback(() => {
+    if (isMobile || !canScrollNext) return;
+
+    isManualScrollRef.current = true;
+    stopSlider();
+
+    setIsTransitioning(true);
+    const nextIndex = currentIndexRef.current + 1;
+    if (nextIndex >= totalSlides - 3) {
+      setTimeout(() => {
+        setIsTransitioning(false);
+        setCurrentIndex(0);
+        setIsFirstSlide(true);
+      }, 1000);
     }
-    
-    setIsSwitching(true);
-    setLastLoadedTime(now);
-    
-    if (hoverTimeoutRef.current) {
-      clearTimeout(hoverTimeoutRef.current);
-    }
-    
-    setHoveredIndex(null);
-    
+    setCurrentIndex(nextIndex);
+
     setTimeout(() => {
-      setHoveredIndex(index);
-      setIsSwitching(false);
-    }, 2000);
-  };
-  
-  const handleSlideMouseLeave = () => {
-    if (isMobile) return;
-    
-    if (hoverTimeoutRef.current) {
-      clearTimeout(hoverTimeoutRef.current);
-    }
-    setHoveredIndex(null);
-  };
+      isManualScrollRef.current = false;
+    }, 500);
+  }, [isMobile, totalSlides, stopSlider, setCurrentIndex, canScrollNext]);
 
+  const scrollToPrev = useCallback(() => {
+    if (isMobile || !canScrollPrev) return;
+
+    isManualScrollRef.current = true;
+    stopSlider();
+
+    setIsTransitioning(true);
+    const newIndex =
+      currentIndexRef.current === 0
+        ? totalSlides - 4
+        : currentIndexRef.current - 1;
+    if (currentIndexRef.current === 0) {
+      setTimeout(() => {
+        setIsTransitioning(false);
+        setCurrentIndex(newIndex);
+      }, 1000);
+    }
+    setCurrentIndex(newIndex);
+
+    setTimeout(() => {
+      isManualScrollRef.current = false;
+    }, 500);
+  }, [isMobile, totalSlides, stopSlider, setCurrentIndex, canScrollPrev]);
+
+  // Обработчики для всей области слайдера
+  const handleSliderAreaEnter = useCallback(() => {
+    stopSlider();
+  }, [stopSlider]);
+
+  const handleSliderAreaLeave = useCallback(
+    (e: React.MouseEvent) => {
+      if (isMobile) return;
+
+      if (isManualScrollRef.current) {
+        return;
+      }
+
+      const relatedTarget = e.relatedTarget as HTMLElement;
+      const isStillInSliderArea = relatedTarget?.closest(
+        `.${styles.sliderWithControls}`
+      );
+
+      if (isStillInSliderArea) {
+        return;
+      }
+
+      startSliderWithDelay();
+    },
+    [isMobile, startSliderWithDelay]
+  );
+
+  const handleCardHover = useCallback(
+    (index: number) => {
+      if (isMobile) return;
+
+      const now = Date.now();
+
+      // Защита от частых переключений
+      if (isSwitching || now - lastLoadedTime < 2000) {
+        return;
+      }
+
+      setIsSwitching(true);
+      setLastLoadedTime(now);
+
+      // Сначала скрываем текущий гист для плавной анимации
+      setHoveredIndex(null);
+
+      // Затем через задержку показываем новый
+      setTimeout(() => {
+        setHoveredIndex(index);
+        setIsSwitching(false);
+      }, 2000); // Задержка для плавной смены
+    },
+    [isMobile, isSwitching, lastLoadedTime]
+  );
+
+  // Эффект для управления анимацией слайдера
+  useEffect(() => {
+    if (!isMobile && visibleStates[0] && data.length > 0) {
+      startInterval();
+    }
+  }, [isMobile, visibleStates, data.length, startInterval]);
+
+  // Эффект для очистки при размонтировании
   useEffect(() => {
     if (isMobile || !visibleStates[0] || totalSlides <= 3) {
       if (intervalRef.current) {
@@ -167,17 +278,7 @@ const TechStackSlider = ({
       return;
     }
 
-    const timeoutId = setTimeout(
-      () => {
-        if (!isPaused) {
-          startInterval();
-        }
-      },
-      isFirstSlide ? scrollSpeed / 2 : scrollSpeed
-    );
-
     return () => {
-      clearTimeout(timeoutId);
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
       }
@@ -185,22 +286,13 @@ const TechStackSlider = ({
         clearTimeout(resumeTimeoutRef.current);
       }
     };
-  }, [
-    isMobile,
-    totalSlides,
-    isFirstSlide,
-    currentIndex,
-    scrollSpeed,
-    isPaused,
-    startInterval,
-    visibleStates,
-  ]);
+  }, [isMobile, totalSlides, visibleStates]);
 
   useEffect(() => {
     if (isMobile || !isTransitioning) {
       return;
     }
-    
+
     const timeout = setTimeout(() => {
       setIsTransitioning(true);
     }, 50);
@@ -214,53 +306,90 @@ const TechStackSlider = ({
       <div className={`${styles.title}`}>My Expertise</div>
       <div className={styles.sliderWrapper}>
         <div
-          ref={setRef(0)}
-          className={`${styles.sliderContainer} ${isMobile ? styles.mobileContainer : ''}`}
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
+          className={styles.sliderArea}
+          onMouseEnter={handleSliderAreaEnter}
+          onMouseLeave={handleSliderAreaLeave}
         >
-          {isMobile ? (
-            <div className={styles.verticalList}>
-              {displayData.map((item, index) => (
-                <div
-                  key={`mobile-slide-${index}`}
-                  className={styles.verticalSlide}
-                >
-                  <TechStackCard
-                    logo={item.logo}
-                    title={item.title}
-                    description={item.description}
-                    gist={item.gist}
-                  />
-                </div>
-              ))}
-            </div>
-          ) : (
+          <div className={styles.sliderWithControls}>
             <div
-              className={styles.sliderTrack}
-              style={{
-                transform: `translateX(${-currentIndex * slideWidth}px)`,
-                transition: isTransitioning ? "transform 1s ease-in-out" : "none",
-              }}
+              ref={setRef(0)}
+              className={`${styles.sliderContainer} ${
+                isMobile ? styles.mobileContainer : ""
+              }`}
             >
-              {displayData.map((item, index) => (
-                <div
-                  key={`slide-${index}`}
-                  className={styles.slide}
-                  onMouseEnter={() => handleCardHover(index)}
-                  onMouseLeave={handleSlideMouseLeave}
-                >
-                  <TechStackCard
-                    logo={item.logo}
-                    title={item.title}
-                    description={item.description}
-                    gist={item.gist}
-                  />
+              {isMobile ? (
+                <div className={styles.verticalList}>
+                  {displayData.map((item, index) => (
+                    <div
+                      key={`mobile-slide-${index}`}
+                      className={styles.verticalSlide}
+                    >
+                      <TechStackCard
+                        logo={item.logo}
+                        title={item.title}
+                        description={item.description}
+                        gist={item.gist}
+                      />
+                    </div>
+                  ))}
                 </div>
-              ))}
+              ) : (
+                <div
+                  className={styles.sliderTrack}
+                  style={{
+                    transform: `translateX(${
+                      -currentIndexRef.current * slideWidth
+                    }px)`,
+                    transition: isTransitioning
+                      ? "transform 1s ease-in-out"
+                      : "none",
+                  }}
+                >
+                  {displayData.map((item, index) => (
+                    <div
+                      key={`slide-${index}`}
+                      className={styles.slide}
+                      onMouseEnter={() => handleCardHover(index)}
+                      onMouseLeave={() => {
+                        if (isMobile) return;
+                      }}
+                    >
+                      <TechStackCard
+                        logo={item.logo}
+                        title={item.title}
+                        description={item.description}
+                        gist={item.gist}
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
-          )}
+
+            {!isMobile && (
+              <>
+                <div
+                  className={`${styles.chevronLeft} ${
+                    !canScrollPrev ? styles.chevronDisabled : ""
+                  }`}
+                  onClick={scrollToPrev}
+                >
+                  <div className={styles.chevronIcon} />
+                </div>
+
+                <div
+                  className={`${styles.chevronRight} ${
+                    !canScrollNext ? styles.chevronDisabled : ""
+                  }`}
+                  onClick={scrollToNext}
+                >
+                  <div className={styles.chevronIcon} />
+                </div>
+              </>
+            )}
+          </div>
         </div>
+
         {!isMobile && (
           <div className={styles.indicatorWrapper}>
             <GistViewer

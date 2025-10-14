@@ -10,10 +10,6 @@ const CvContent = () => {
   return (
     <div className={styles.cvContent}>
       <HeroSection />
-      {/* <div 
-        ref={setRef(0)}
-        className={`${styles.subtitle} ${visibleStates[0]  ? styles.visible : ''}`}
-      > */}
       <TechStackSlider data={stackArray} />
       <MyWork />
       <Contacts />

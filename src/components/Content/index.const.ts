@@ -178,6 +178,6 @@ export const contactsTitle =`По вопросам сотрудничества
 export const contactsData: ContactItem[] = [
   { type: 'email', action: 'andrej.vyazovov@yandex.ru' },
   { type: 'phone', action: '+7(953)125-63-00' },
-  { type: 'telegram', action: 'https://t.me/@vavrao68' },
+  { type: 'telegram', action: 'https://t.me/vavrao68' },
   { type: 'github', action: 'https://github.com/Andrey68Vyazovov' },
 ];

@@ -1,9 +1,9 @@
 import styles from './index.module.scss';
 
 interface SpeedIndicatorProps {
-  scrollSpeed: number; // Скорость прокрутки (1000, 2000, 4000)
-  isPaused: boolean; // Состояние паузы
-  onSpeedChange?: () => void; // Callback для смены скорости
+  scrollSpeed: number;
+  isPaused: boolean;
+  onSpeedChange?: () => void;
 }
 
 const SpeedIndicator = ({ scrollSpeed, isPaused, onSpeedChange }: SpeedIndicatorProps) => {
