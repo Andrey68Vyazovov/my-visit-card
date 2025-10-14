@@ -19,7 +19,7 @@ export const stackArray: TechStackItem[] = [
     \n- WebSocket для реального времени
     \n- TypeScript для типобезопасности
     \n- Next.js Image для оптимизации`,
-    gist: "https://gist.github.com/Andrey68Vyazovov/9e1cf8168aeff338035055fb342229f2",
+    gist: "https://gist.github.com/Andrey68Vyazovov/4f729d77d15a7149d345032845c03b09",
     content: "import { GetServerSideProps } from 'next';\nimport { useState, useEffect } from 'react';\nimport dynamic from 'next/dynamic';\n\ninterface User { id: number; name: string; avatar: string; }\n\nconst UserStats = dynamic(() => import('./UserStats'), { \n  loading: () => <div>Loading stats...</div>,\n  ssr: false \n});\n\nexport const getServerSideProps: GetServerSideProps = async (ctx) => {\n  const user = await fetch(`https://api.example.com/users/${ctx.params?.id}`, {\n    headers: { 'Cache-Control': 's-maxage=60, stale-while-revalidate=120' }\n  }).then(res => res.json());\n\n  return { props: { user } };\n};\n\nexport default function OptimizedProfile({ user }: { user: User }) {\n  const [realTimeData, setRealTimeData] = useState(user);\n\n  useEffect(() => {\n    const ws = new WebSocket(`wss://api.example.com/users/${user.id}/live`);\n    ws.onmessage = (event) => setRealTimeData(JSON.parse(event.data));\n    return () => ws.close();\n  }, [user.id]);\n\n  return (\n    <div>\n      <Image \n        src={user.avatar} \n        alt={user.name}\n        width={150} \n        height={150}\n        priority\n        placeholder=\"blur\"\n        blurDataURL=\"data:image/jpeg;base64,...\"\n      />\n      <h1>{realTimeData.name}</h1>\n      <UserStats userId={user.id} />\n    </div>\n  );\n}",  },
   {
     logo: "https://redux.js.org/img/redux.svg",
